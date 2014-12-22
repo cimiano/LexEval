@@ -1,4 +1,4 @@
-# This is a small lexicon for foaf, it only uses the properties foaf:knows and foaf:member as well as the classes foaf:Person and foaf:Project
+# Here we add a new entry love which is essentially a copy of know but does not appear in the gold lexicon foaf.ttl; this should decrease precision but leave recall unaffected
 
 @prefix lemon: <http://lemon-model.net/lemon#> .
 @prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> .
@@ -23,6 +23,22 @@ lexinfo:prepositionalArg :know_arg2.
 :know_sense lemon:reference  foaf:friend;
 lemon:subjOfProp :know_arg1 ;
 lemon:objOfProp  :know_arg2.
+
+:love a lemon:LexicalEntry ;
+    lexinfo:partOfSpeech lexinfo:verb;
+    lemon:canonicalForm :love_canonical_form;
+    lemon:synBehavior :love_transitive_pp;
+    lemon:sense :love_sense.
+
+:know_canonical_form lemon:writtenRep "love"@en.
+
+:love_transitive_pp a lexinfo:TransitiveFrame;
+lexinfo:subject  :love_arg1 ;
+lexinfo:prepositionalArg :love_arg2.
+
+:love_sense lemon:reference  foaf:friend;
+lemon:subjOfProp :love_arg1 ;
+lemon:objOfProp  :love_arg2.
 
 :friend_of a lemon:LexicalEntry ; 
     lexinfo:partOfSpeech lexinfo:noun ;

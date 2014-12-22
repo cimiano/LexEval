@@ -1,7 +1,7 @@
-# This is a small lexicon for foaf, it only uses the properties foaf:knows and foaf:member as well as the classes foaf:Person and foaf:Project
+# Here we switch the argument mappings of know; this should decrease the mapping precision
 
 @prefix lemon: <http://lemon-model.net/lemon#> .
-@prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> .
+@prefix lexinfo: <http://lexinfo.net/ontology/2.0/lexinfo.owl#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
@@ -21,8 +21,8 @@ lexinfo:subject  :know_arg1 ;
 lexinfo:prepositionalArg :know_arg2.
 
 :know_sense lemon:reference  foaf:friend;
-lemon:subjOfProp :know_arg1 ;
-lemon:objOfProp  :know_arg2.
+lemon:subjOfProp :know_arg2 ;
+lemon:objOfProp  :know_arg1.
 
 :friend_of a lemon:LexicalEntry ; 
     lexinfo:partOfSpeech lexinfo:noun ;

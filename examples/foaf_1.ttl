@@ -1,4 +1,4 @@
-# This is a small lexicon for foaf, it only uses the properties foaf:knows and foaf:member as well as the classes foaf:Person and foaf:Project
+# This example simulates the fact that acuqainted with has not been acquired, which incurrs a reduction of recall... 
 
 @prefix lemon: <http://lemon-model.net/lemon#> .
 @prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> .

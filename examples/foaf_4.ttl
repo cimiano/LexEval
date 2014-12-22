@@ -1,7 +1,7 @@
-# This is a small lexicon for foaf, it only uses the properties foaf:knows and foaf:member as well as the classes foaf:Person and foaf:Project
+# Here we change the Frame type of friend to TransitiveVerb; this should decrease syntactic precision
 
 @prefix lemon: <http://lemon-model.net/lemon#> .
-@prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> .
+@prefix lexinfo: <http://lexinfo.net/ontology/2.0/lexinfo.owl#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
@@ -33,7 +33,7 @@ lemon:objOfProp  :know_arg2.
 :friend_form a lemon:Form;
 lemon:writtenRep "friend"@en.
 
-:friend_of_nounpp a lexinfo:NounPPFrame;
+:friend_of_nounpp a lexinfo:TransitiveFrame;
 lexinfo:coplativeArg :friend_of_nounpp_arg1;
 lexinfo:prepositionalObj :friend_of_nounpp_arg2.
 
