@@ -2,6 +2,8 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.jena.riot.RDFDataMgr;
+
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -22,17 +24,9 @@ public class LexiconLoader {
 	
 	Lexicon loadFromFile(String file)
 	{
-		Model model = ModelFactory.createDefaultModel();
 		
-		InputStream in = FileManager.get().open( file );
-		 if (in == null) {
-		     throw new IllegalArgumentException(
-		                                  "File: " + file + " not found");
-		 }
-
-		 // read in the fist lexicon
-		 model.read(in, null);
-				
+		Model model = RDFDataMgr.loadModel(file);
+		
 		 Statement stmt;
 		 Resource subject;
 		 
@@ -51,9 +45,11 @@ public class LexiconLoader {
 			 
 			 entry.setCanonicalForm(getCanonicalForm(subject,model));
 			 
-			 entry.setSyntacticBehaviour(getSyntacticBehaviour(subject,model));
+			 entry.setFrame(getFrame(subject,model));
 			 
 			 entry.setReference(getReference(subject,model));
+			 
+			 entry.setPOS(getPOS(subject,model));
 			 
 			 entry.setSyntacticArguments(getSyntacticArguments(subject,model));
 			 
@@ -71,6 +67,27 @@ public class LexiconLoader {
 	}
 	
 	
+	private String getPOS(Resource subject, Model model) {
+		
+		Resource pos;
+		
+		Statement stmt;
+		
+		stmt = subject.getProperty(LEXINFO.partOfSpeech);
+		
+		if (stmt != null)
+		{
+			pos = (Resource) stmt.getObject();
+			
+			return pos.toString();
+		}
+		else
+		{
+			return null;
+		}
+		
+	}
+
 	private Set<SenseArgument> getSenseArguments(Resource subject, Model model) {
 		
 		Resource sense;
@@ -147,12 +164,11 @@ public class LexiconLoader {
 		
 		if (stmt != null)
 		{
-		
 			synBehaviour = (Resource) stmt.getObject();
 			
-			StmtIterator it = synBehaviour.listProperties(LingInfo.subject);
+			StmtIterator it = synBehaviour.listProperties(LEXINFO.subject);
 		    while( it.hasNext() ) {
-		    
+		    	
 		    	stmt = it.next();
 		    	
 		    	object = (Resource) stmt.getObject();
@@ -160,9 +176,10 @@ public class LexiconLoader {
 		    	syntacticArguments.add(new SyntacticArgument("subject",object.toString(),null));
 		    }	
 		    	
-	    	it = synBehaviour.listProperties(LingInfo.object);
+	    	it = synBehaviour.listProperties(LEXINFO.object);
 		    while( it.hasNext() ) {
 		    
+			
 		    	stmt = it.next();
 		    	
 		    	object = (Resource) stmt.getObject();
@@ -171,10 +188,11 @@ public class LexiconLoader {
 		    	
 		    }
 		    
-	    	it = synBehaviour.listProperties(LingInfo.pobject);
-		    while( it.hasNext() ) {
+	    	it = synBehaviour.listProperties(LEXINFO.pobject);
+		   
+	    	while( it.hasNext() ) {
 		    
-		    	stmt = it.next();
+	    	 	stmt = it.next();
 		    	
 		    	object = (Resource) stmt.getObject();
 		    	
@@ -184,6 +202,8 @@ public class LexiconLoader {
 		    	{
 
 		    		preposition = getCanonicalForm(prepositionEntry,model);
+		    		
+		    		// System.out.print("Preposition: "+preposition+"\n");
 		    		
 		    	}
 		    	else
@@ -230,7 +250,7 @@ public class LexiconLoader {
 				}
 				else
 				{
-					System.out.print("Entry: "+subject+" has no reference!!!\n");
+					// System.out.print("Entry: "+subject+" has no reference!!!\n");
 					return null;
 				}
 			}
@@ -242,13 +262,13 @@ public class LexiconLoader {
 		}
 		else 
 		{
-			System.out.print("Entry: "+subject+" has no sense!!!\n");
+			// System.out.print("Entry: "+subject+" has no sense!!!\n");
 			return null;
 		}
 			
 	}
 
-	private static String getSyntacticBehaviour(Resource subject, Model model) {
+	private static String getFrame(Resource subject, Model model) {
 		
 		Resource syntacticBehaviour;
 		
@@ -272,14 +292,17 @@ public class LexiconLoader {
 		    	
 		    	if (!value.equals("http://lemon-model.net/lemon#Frame"))
 		    	{
+		    		
+		    		System.out.print(value+"\n");
 			    	return value;
+			    	
 		    	}
 		    }
 			
 		}
 		else
 		{
-			System.out.print("Entry "+subject+" has no syntactic behaviour!\n");
+			// System.out.print("Entry "+subject+" has no syntactic behaviour!\n");
 		}
 		
 		return value;
@@ -290,22 +313,41 @@ public class LexiconLoader {
 		
 		Resource canonicalForm;
 		
+		Statement stmt;
+		
 		Literal form;
 		
-		canonicalForm = (Resource) subject.getProperty(LEMON.canonicalForm).getObject();
+		stmt = subject.getProperty(LEMON.canonicalForm);
 		
-		if (canonicalForm != null)
+		if (stmt != null)
 		{
-			form = (Literal) canonicalForm.getProperty(LEMON.writtenRep).getObject();
-		
-			return form.toString();
+			canonicalForm = (Resource) stmt.getObject();
+			
+			if (canonicalForm != null)
+			{
+				stmt = canonicalForm.getProperty(LEMON.writtenRep);
+				
+				if (stmt != null)
+				{
+				form = (Literal) canonicalForm.getProperty(LEMON.writtenRep).getObject();
+					return form.toString();
+				}
+				else
+				{
+					return null;
+				}
+				
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{
-			System.out.print("Entry "+subject+" has no canonical form!!!\n");
+			// System.out.print("Entry "+subject+" has no canonical form!!!\n");
 			return null;
-		}
-	}
-
-	
+		}		
+	}		
 }
+

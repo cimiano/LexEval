@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,8 @@ public class Lexicon {
 		entries = new ArrayList<LexicalEntry>();
 		
 		map = new HashMap<String,List<LexicalEntry>>();
+		
+		references = new HashSet<String>();
 	}
 	
 	public void addEntry(LexicalEntry entry)
@@ -38,6 +41,8 @@ public class Lexicon {
 			list.add(entry);
 			map.put(entry.getCanonicalForm(), list);
 		}
+		references.add(entry.getReference());
+		
 	}
 
 	public List<LexicalEntry> getEntries()
@@ -53,6 +58,11 @@ public class Lexicon {
 	public int size() {
 
 		return entries.size();
+	}
+	
+	public boolean containsReference(String reference)
+	{
+		return references.contains(reference);
 	}
 	
 	public String getStatistics()

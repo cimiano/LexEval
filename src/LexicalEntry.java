@@ -18,6 +18,8 @@ public class LexicalEntry {
 	
 	String FrameType;
 	
+	String POS;
+	
 	HashMap<String,String> argumentMap;
 	
 	Set<SyntacticArgument> synArgs;
@@ -27,6 +29,8 @@ public class LexicalEntry {
 	Double confidence;
 	
 	Provenance provenance;
+	
+	List<String> sentences;
 	
 	public LexicalEntry()
 	{
@@ -73,8 +77,8 @@ public class LexicalEntry {
 	}
 
 	
-	public void setSyntacticBehaviour(String synBehaviour) {
-		// TODO Auto-generated method stub
+	public void setFrame(String frame) {
+		FrameType = frame;
 		
 	}
 
@@ -99,6 +103,8 @@ public class LexicalEntry {
 		string += "Reference: "+this.Reference+"\n";
 		
 		string += "Frame Type: "+this.FrameType+"\n";
+		
+		string += "POS: "+this.POS+"\n";
 		
 		for (String synArg: argumentMap.keySet())
 		{
@@ -126,7 +132,6 @@ public class LexicalEntry {
 	}
 	
 	
-
 	public void setSenseArguments(Set<SenseArgument> senseArguments) {
 		senseArgs = senseArguments;
 		
@@ -137,14 +142,26 @@ public class LexicalEntry {
 		
 		for (SyntacticArgument synArg: synArgs)
 		{
+			// System.out.print("Checking: "+synArg.getArgumentType()+"\n");
+			
 			for (SenseArgument senseArg: senseArgs)
 			{
-				if (synArg.getValue().equals(senseArg))
+				// System.out.print("Checking: "+senseArg.getArgumenType()+"\n");
+				
+				if (synArg.getValue().equals(senseArg.getValue()))
 				{
 					argumentMap.put(synArg.getArgumentType(), senseArg.getArgumenType());
+					
+					// System.out.print(synArg.getArgumentType() + " -> "+senseArg.getArgumenType()+"\n");
+					
 				}
 			}		
 		}
+	}
+	
+	public HashMap<String,String> getArgumentMap()
+	{
+		return this.argumentMap;
 	}
 	
 	public boolean equals(LexicalEntry entry)
@@ -154,6 +171,8 @@ public class LexicalEntry {
 		if (!Reference.equals(entry.getReference())) return false;
 		
 		if (!FrameType.equals(entry.getFrameType())) return false;
+		
+		if (!POS.equals(entry.getPOS())) return false;
 		
 		for (SyntacticArgument synArg: synArgs)
 		{
@@ -166,6 +185,17 @@ public class LexicalEntry {
 		
 		
 		return true;
+	}
+
+
+	public String getPOS() {
+		return POS;
+	}
+
+
+	public void setPOS(String pos) {
+		POS = pos;
+		
 	}
 	
 	
