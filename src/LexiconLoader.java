@@ -293,7 +293,7 @@ public class LexiconLoader {
 		    	if (!value.equals("http://lemon-model.net/lemon#Frame"))
 		    	{
 		    		
-		    		System.out.print(value+"\n");
+		    		// System.out.print(value+"\n");
 			    	return value;
 			    	
 		    	}

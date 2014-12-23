@@ -1,6 +1,11 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -14,14 +19,37 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 public class LexiconEvaluation {
 
-	public static void main(String[] args) {
+	static Set<String> references;
+	
+	static boolean onlyGoldReferences = false;
+	static boolean filterReferences = false;
+	
+	public static void main(String[] args) throws IOException {
 		
 
-		if (args.length != 2)
+		if (args.length < 2)
 		{
-			System.out.print("Usage: LexiconEvaluation <Lexicon.rdf> <GoldLexicon.rdf>\n");
+			System.out.print("Usage: LexiconEvaluation <Lexicon.rdf> <GoldLexicon.rdf> (--onlyGoldReferences|<FileWithReferences>)?\n");
 			return;
 		}
+		
+		String referenceFile = null;
+		
+		if (args.length >2)
+		{
+			if (args[2].equals("--onlyGoldReferences"))
+			{
+				onlyGoldReferences = true;
+			}
+			else
+			{
+				referenceFile = args[2];
+				filterReferences = true;
+				references = readReferenceFile(referenceFile);
+			}
+		}
+		
+		
 		
 		String lexiconFile = args[0];
 		String goldFile = args[1];
@@ -30,6 +58,7 @@ public class LexiconEvaluation {
 		
 		Lexicon lexicon = loader.loadFromFile(lexiconFile);
 		Lexicon gold = loader.loadFromFile(goldFile);
+		
 		
 		System.out.print(lexicon.getStatistics());
 		
@@ -40,6 +69,18 @@ public class LexiconEvaluation {
 		
 		 
 		
+	}
+
+	private static Set<String> readReferenceFile(String referenceFile) throws IOException {
+		
+		Set<String> references = new HashSet<String>();
+		
+		BufferedReader br = new BufferedReader(new FileReader(referenceFile));
+        String line;
+        while((line = br.readLine()) != null) {
+             references.add(line);
+        }
+        return references;
 	}
 
 	private static void evaluate(Lexicon lexicon, Lexicon gold) {
@@ -80,51 +121,53 @@ public class LexiconEvaluation {
 			
 			if (entry.getReference() != null) 
 			{
-				lex_entries++;
-				
-				// System.out.print("Checking entry "+lex_entries+"("+entry.getCanonicalForm()+")");
-				
-				if (gold.getEntriesWithCanonicalForm(entry.getCanonicalForm()) != null)
+				if ((!filterReferences & !onlyGoldReferences) || (filterReferences && references.contains(entry.getReference())) || (onlyGoldReferences && gold.containsReference(entry.getReference())))
 				{
-					for (LexicalEntry gold_entry: gold.getEntriesWithCanonicalForm(entry.getCanonicalForm()))
+					lex_entries++;
+					
+					// System.out.print("Checking entry "+lex_entries+"("+entry.getCanonicalForm()+")");
+					
+					if (gold.getEntriesWithCanonicalForm(entry.getCanonicalForm()) != null)
 					{
-						if (checkLemmaReference(entry,gold_entry)) 
+						for (LexicalEntry gold_entry: gold.getEntriesWithCanonicalForm(entry.getCanonicalForm()))
 						{
-							foundLemma = true;
-							
-							if (checkSyntax(entry,gold_entry))
+							if (checkLemmaReference(entry,gold_entry)) 
 							{
-								foundSyntax = true;
-								if (checkMappings(entry,gold_entry))
+								foundLemma = true;
+								
+								if (checkSyntax(entry,gold_entry))
 								{
-									foundMapping = true;
+									foundSyntax = true;
+									if (checkMappings(entry,gold_entry))
+									{
+										foundMapping = true;
+									}
 								}
 							}
+								
 						}
-							
-					}
-					if (foundLemma) 
-					{
-						lemma_correctness ++;
-						// System.out.print("Found!!!\n");
-					}
-				
-					if (foundSyntax)
-					{
-						syntactic_correctness ++;
-					}
-					else
-					{
-						// System.out.print("Syntax wrong for: "+entry+"\n");
-					}
+						if (foundLemma) 
+						{
+							lemma_correctness ++;
+							// System.out.print("Found!!!\n");
+						}
 					
-					if (foundMapping)
-					{
-						mapping_correctness ++;
+						if (foundSyntax)
+						{
+							syntactic_correctness ++;
+						}
+						else
+						{
+							// System.out.print("Syntax wrong for: "+entry+"\n");
+						}
+						
+						if (foundMapping)
+						{
+							mapping_correctness ++;
+						}
 					}
-					
-				}						
-			}
+				}
+			}						
 		}
 		
 		lemma_precision = (double) lemma_correctness / lex_entries;
@@ -137,7 +180,7 @@ public class LexiconEvaluation {
 		
 		System.out.print("Computing Recall...\n");
 		
-		
+
 		lemma_correctness = 0;
 		syntactic_correctness = 0;
 		mapping_correctness = 0;
@@ -152,48 +195,52 @@ public class LexiconEvaluation {
 			
 			if (gold_entry.getReference() != null) 
 			{
-				lex_entries++;
-				
-				// System.out.print("Checking entry "+lex_entries+"("+gold_entry.getCanonicalForm()+")");
-				
-				if (lexicon.getEntriesWithCanonicalForm(gold_entry.getCanonicalForm()) != null)
+				if (!filterReferences || (filterReferences && references.contains(gold_entry.getReference())))
 				{
-					for (LexicalEntry entry: lexicon.getEntriesWithCanonicalForm(gold_entry.getCanonicalForm()))
+				
+					lex_entries++;
+					
+					// System.out.print("Checking entry "+lex_entries+"("+gold_entry.getCanonicalForm()+")");
+					
+					if (lexicon.getEntriesWithCanonicalForm(gold_entry.getCanonicalForm()) != null)
 					{
-						if (checkLemmaReference(gold_entry,entry)) 
+						for (LexicalEntry entry: lexicon.getEntriesWithCanonicalForm(gold_entry.getCanonicalForm()))
 						{
-							foundLemma = true;
-							
-							if (checkSyntax(gold_entry,entry))
+							if (checkLemmaReference(gold_entry,entry)) 
 							{
-								foundSyntax = true;
-								if (checkMappings(gold_entry,entry))
+								foundLemma = true;
+								
+								if (checkSyntax(gold_entry,entry))
 								{
-									foundMapping = true;
+									foundSyntax = true;
+									if (checkMappings(gold_entry,entry))
+									{
+										foundMapping = true;
+									}
 								}
 							}
+	
 						}
-
-					}
-					if (foundLemma) 
-					{
-						lemma_correctness ++;
-						// System.out.print("Found!\n");
-					}
-				
-					if (foundSyntax)
-					{
-						syntactic_correctness ++;
-					}
-					else
-					{
-						// System.out.print("Syntax wrong for: "+gold_entry+"\n");
-					}
-					if (foundMapping)
-					{
-						mapping_correctness ++;
-					}
-				}						
+						if (foundLemma) 
+						{
+							lemma_correctness ++;
+							// System.out.print("Found!\n");
+						}
+					
+						if (foundSyntax)
+						{
+							syntactic_correctness ++;
+						}
+						else
+						{
+							// System.out.print("Syntax wrong for: "+gold_entry+"\n");
+						}
+						if (foundMapping)
+						{
+							mapping_correctness ++;
+						}
+					}						
+				}
 			}
 		}
 		
@@ -235,9 +282,6 @@ public class LexiconEvaluation {
 			{
 				if (!entry_map.get(synArg).equals(gold_entry_map.get(synArg))) return false;
 			}
-			
-			
-			
 		}
 		
 		return true;
