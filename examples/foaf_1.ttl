@@ -1,4 +1,6 @@
-# This example simulates the fact that acuqainted with has not been acquired, which incurrs a reduction of recall... 
+# This lexicon misses the entry for acquainted with, which is in the gold standard lexicon foaf.ttl
+# The precision should still be 100%
+# As one entry is missing the recall should be 5/6 = 83.33% 
 
 @prefix lemon: <http://lemon-model.net/lemon#> .
 @prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> .
@@ -18,7 +20,7 @@
 
 :know_transitive_pp a lexinfo:TransitiveFrame;
 lexinfo:subject  :know_arg1 ;
-lexinfo:prepositionalArg :know_arg2.
+lexinfo:directObject :know_arg2.
 
 :know_sense lemon:reference  foaf:friend;
 lemon:subjOfProp :know_arg1 ;
@@ -68,31 +70,6 @@ lemon:objOfProp  :member_of_nounpp_arg1.
 
 :member_of_nounpp_arg2 lemon:marker :of ;
                    lemon:optional "false"^^xsd:boolean .
-
-:acquainted_with a lemon:LexicalEntry ;
-    lexinfo:partOfSpeech lexinfo:adjective ;
-    lemon:canonicalForm :acquainted_form;
-    lemon:synBehavior :acquainted_adjective_frame;
-    lemon:sense :acquainted_with_sense.
-
-:acquainted_form a lemon:Form;
-lemon:writtenRep "acquainted"@en.
-
-:acquainted_adjective_frame a lexinfo:AdjectivePPFrame;
-lexinfo:coplativeArg :acquainted_adjective_arg1;
-lexinfo:prepositionalObj :acquainted_adjective_arg2.  
-
-:acquainted_with_sense lemon:reference foaf:friend;
-lemon:subjOfProp :acquainted_adjective_arg1;
-lemon:objOfProp  :acquainted_adjective_arg2. 
-
-:acquainted_adjective_arg2 lemon:marker :with ;
-                   lemon:optional "false"^^xsd:boolean .
-
-:with a lemon:LexicalEntry ;
-  lemon:canonicalForm :with_form .
-
-:with_form lemon:writtenRep "with"@en .
 
 :person a lemon:LexicalEntry ;
     lexinfo:partOfSpeech lexinfo:noun ;

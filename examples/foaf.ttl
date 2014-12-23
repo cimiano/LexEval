@@ -18,7 +18,7 @@
 
 :know_transitive_pp a lexinfo:TransitiveFrame;
 lexinfo:subject  :know_arg1 ;
-lexinfo:prepositionalArg :know_arg2.
+lexinfo:directObject :know_arg2.
 
 :know_sense lemon:reference  foaf:friend;
 lemon:subjOfProp :know_arg1 ;
