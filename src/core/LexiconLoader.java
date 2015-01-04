@@ -1,8 +1,12 @@
+package core;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jena.riot.RDFDataMgr;
+
+import vocabularies.LEMON;
+import vocabularies.LEXINFO;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -112,7 +116,7 @@ public class LexiconLoader {
 		    	
 		    	object = (Resource) stmt.getObject();
 		    	
-		    	senseArguments.add(new SenseArgument("isA",object.toString()));
+		    	senseArguments.add(new SenseArgument(stmt.getPredicate().toString(),object.toString()));
 		    }	
 		    	
 	    	it = sense.listProperties(LEMON.subjOfProp);
@@ -122,7 +126,7 @@ public class LexiconLoader {
 		    	
 		    	object = (Resource) stmt.getObject();
 		    	
-		    	senseArguments.add(new SenseArgument("subjOfProp",object.toString()));
+		    	senseArguments.add(new SenseArgument(stmt.getPredicate().toString(),object.toString()));
 		    	
 		    }
 		    
@@ -134,7 +138,7 @@ public class LexiconLoader {
 		    	object = (Resource) stmt.getObject();
 		    	
 		  
-		    	senseArguments.add(new SenseArgument("objOfProp",object.toString()));	
+		    	senseArguments.add(new SenseArgument(stmt.getPredicate().toString(),object.toString()));	
 		    	
 		    }
 		    	
@@ -173,7 +177,7 @@ public class LexiconLoader {
 		    	
 		    	object = (Resource) stmt.getObject();
 		    	
-		    	syntacticArguments.add(new SyntacticArgument("subject",object.toString(),null));
+		    	syntacticArguments.add(new SyntacticArgument(stmt.getPredicate().toString(),object.toString(),null));
 		    }	
 		    	
 	    	it = synBehaviour.listProperties(LEXINFO.object);
@@ -184,7 +188,7 @@ public class LexiconLoader {
 		    	
 		    	object = (Resource) stmt.getObject();
 		    	
-		    	syntacticArguments.add(new SyntacticArgument("object",object.toString(),null));
+		    	syntacticArguments.add(new SyntacticArgument(stmt.getPredicate().toString(),object.toString(),null));
 		    	
 		    }
 		    
@@ -211,7 +215,7 @@ public class LexiconLoader {
 		    		preposition = null;
 		    	}
 		    	
-		    	syntacticArguments.add(new SyntacticArgument("pobject",object.toString(),preposition));	
+		    	syntacticArguments.add(new SyntacticArgument(stmt.getPredicate().toString(),object.toString(),preposition));	
 		    	
 		    }
 		    	

@@ -1,3 +1,4 @@
+package vocabularies;
 
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -7,7 +8,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Class with some common static terms 
- * @author vroddon
+ * @author pcimiano
  */
 public class LEMON {
 	private static Model defaultModel = ModelFactory.createDefaultModel(); 
