@@ -1,5 +1,6 @@
 package serialization;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 import vocabularies.LEMON;
@@ -73,15 +74,18 @@ public class LexiconSerialization {
 		
 		if (provenance != null)
 		{
+			SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssZ");			
 			model.add(model.createResource(entry.getURI()), PROVO.generatedBy, model.createResource(entry.getURI()+"_Activity"));
 			model.add(model.createResource(entry.getURI()+"_Activity"), RDF.type, PROVO.Activity);
 			
-			if (provenance.getStartedAtTime() != null) model.add(model.createResource(entry.getURI()+"_Activity"), PROVO.startedAtTime, model.createLiteral(provenance.getStartedAtTime().toString()));
+			if (provenance.getStartedAtTime() != null) model.add(model.createResource(entry.getURI()+"_Activity"), PROVO.startedAtTime, model.createLiteral(df.format(provenance.getStartedAtTime())));
 			
-			if (provenance.getEndedAtTime() != null) model.add(model.createResource(entry.getURI()+"_Activity"), PROVO.endedatTime, model.createLiteral(provenance.getEndedAtTime().toString()));
+			if (provenance.getEndedAtTime() != null) model.add(model.createResource(entry.getURI()+"_Activity"), PROVO.endedatTime, model.createLiteral(df.format(provenance.getEndedAtTime())));
 			
 			if (provenance.getConfidence() != null) model.add(model.createResource(entry.getURI()+"_Activity"), model.createProperty("confidence"), model.createLiteral(provenance.getConfidence().toString()));
 		
+			if (provenance.getAgent() != null) model.add(model.createResource(entry.getURI()+"_Activity"), PROVO.associatedWith, model.createResource(provenance.getAgent()));
+			
 		}
 		
 	}
