@@ -1,5 +1,4 @@
 package core;
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,12 +9,10 @@ import vocabularies.LEXINFO;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 
@@ -45,7 +42,9 @@ public class LexiconLoader {
 			 
 			 subject = stmt.getSubject();
 			 
-			 entry = new LexicalEntry(subject);
+			 entry = new LexicalEntry();
+			 entry.setURI(subject.toString());
+			 
 			 
 			 entry.setCanonicalForm(getCanonicalForm(subject,model));
 			 

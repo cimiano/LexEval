@@ -29,7 +29,6 @@ public class LEMON {
 	public static Property objOfProp = defaultModel.createProperty("http://lemon-model.net/lemon#objOfProp");
 	public static Property subjOfProp = defaultModel.createProperty("http://lemon-model.net/lemon#subfOfProp");
 	
-	
 	public static Resource Lexicon = defaultModel.createProperty("http://lemon-model.net/lemon#Lexicon");
 	public static Resource LexicalEntry = defaultModel.createProperty("http://lemon-model.net/lemon#LexicalEntry");
     

@@ -8,9 +8,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class LexicalEntry {
 
-	Resource Res;
-	
-	String Type;
+	String URI;
 	
 	String CanonicalForm;
 	
@@ -25,10 +23,8 @@ public class LexicalEntry {
 	Set<SyntacticArgument> synArgs;
 	
 	Set<SenseArgument> senseArgs;
-	
-	Double confidence;
-	
-	Provenance provenance;
+		
+	Provenance Provenance;
 	
 	List<String> sentences;
 	
@@ -41,17 +37,13 @@ public class LexicalEntry {
 	}
 	
 	
-	public LexicalEntry(Resource res) {
-		Res = res;
+	public LexicalEntry(String uri) {
+		URI = uri;
 		argumentMap = new HashMap<String,String>();
 		synArgs = new HashSet<SyntacticArgument>();
 		senseArgs = new HashSet<SenseArgument>();
 	}
 	
-	public void setType(String type)
-	{
-		Type = type;
-	}
 
 	public String getMapping(String synArg)
 	{
@@ -98,7 +90,7 @@ public class LexicalEntry {
 	{
 		String string = "";
 		
-		string += "Lexical Entry: "+this.CanonicalForm +"(" +  this.Res+")\n";
+		string += "Lexical Entry: "+this.CanonicalForm +"(" +  URI+")\n";
 		
 		string += "Reference: "+this.Reference+"\n";
 		
@@ -196,6 +188,40 @@ public class LexicalEntry {
 	public void setPOS(String pos) {
 		POS = pos;
 		
+	}
+
+
+	public void setURI(String uri) {
+		URI = uri;
+		
+	}
+	
+	public String getURI()
+	{
+		return URI;
+	}
+
+
+	public void addSyntacticArgument(SyntacticArgument synArg) {
+		synArgs.add(synArg);
+		
+	}
+	
+
+	public void addSenseArgument(SenseArgument semArg) {
+		senseArgs.add(semArg);
+		
+	}
+
+
+	public void setProvenance(Provenance provenance) {
+		Provenance = provenance;
+		
+	}
+	
+	public Provenance getProvenance()
+	{
+		return Provenance;
 	}
 	
 	

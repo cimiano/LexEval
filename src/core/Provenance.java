@@ -9,7 +9,7 @@ public class Provenance {
 	Date StartedAtTime;
 	Date EndedAtTime;
 	
-	double Confidence;
+	Double Confidence;
 	
 	public String getAgent()
 	{
@@ -21,12 +21,12 @@ public class Provenance {
 		Agent = agent;
 	}
 	
-	public double getConfidence()
+	public Double getConfidence()
 	{
 		return Confidence;
 	}
 	
-	public void setConfidence(double confidence)
+	public void setConfidence(Double confidence)
 	{
 		Confidence = confidence;
 	}
@@ -41,12 +41,12 @@ public class Provenance {
 		EndedAtTime = date;
 	}
 	
-	public Date getStartedAtTime(Date date)
+	public Date getStartedAtTime()
 	{
 		return StartedAtTime;
 	}
 	
-	public Date getEndedAtTime(Date date)
+	public Date getEndedAtTime()
 	{
 		return EndedAtTime;
 	}

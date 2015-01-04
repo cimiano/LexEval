@@ -2,6 +2,7 @@ package core;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +15,8 @@ public class Lexicon {
 	
 	Set<String> references;
 	
+	String baseURI = "";
+	
 	public Lexicon()
 	{
 		entries = new ArrayList<LexicalEntry>();
@@ -21,6 +24,17 @@ public class Lexicon {
 		map = new HashMap<String,List<LexicalEntry>>();
 		
 		references = new HashSet<String>();
+	}
+	
+	public Lexicon(String baseURI)
+	{
+		entries = new ArrayList<LexicalEntry>();
+		
+		map = new HashMap<String,List<LexicalEntry>>();
+		
+		references = new HashSet<String>();
+		
+		this.baseURI = baseURI;
 	}
 	
 	public void addEntry(LexicalEntry entry)
@@ -69,6 +83,26 @@ public class Lexicon {
 	public String getStatistics()
 	{
 		return "";
+	}
+
+	public LexicalEntry createNewEntry(String canonicalForm) {
+		
+		LexicalEntry entry = new LexicalEntry();
+		
+		entry.setCanonicalForm(canonicalForm);
+		
+		addEntry(entry);
+		
+		entry.setURI(baseURI+"LexicalEntry_"+entries.size()+"_"+canonicalForm);
+		
+		return entry;
+		
+		
+	}
+	
+	public Iterator<LexicalEntry> iterator()
+	{
+		return entries.iterator();
 	}
 	
 	

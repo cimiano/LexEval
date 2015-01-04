@@ -18,9 +18,16 @@ public class LEXINFO {
 	public static Property copulativeArg = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#copulativeArg");
 	public static Property possessiveAdjunct = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#possessiveAdjunct");
 	public static Property partOfSpeech = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#partOfSpeech");
+
+	public static Property verb = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#verb");
+	public static Property commonNoun = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#commonNoun");
+	public static Property adjective = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#adjective");
 	
-     
-     
-       
-     
+	public static Property transitiveFrame = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#TransitiveFrame");
+	public static Property adjectivePPFrame = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#AdjectivePPFrame");
+	public static Property nounPossessiveFrame = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#NounPossessiveFrame");
+	public static Property nounPredicateFrame = defaultModel.createProperty("http://www.lexinfo.net/ontology/2.0/lexinfo#NounPredicateFrame");
+	
+
+	
 }
