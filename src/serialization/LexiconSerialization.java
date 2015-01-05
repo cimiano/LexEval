@@ -22,7 +22,13 @@ public class LexiconSerialization {
 		for (LexicalEntry entry: lexicon.getEntries())
 		{
 			serialize(entry,model);
+			model.add(model.createResource("Lexicon"), LEMON.entry, model.createResource(entry.getURI()));	
 		}
+		
+		model.add(model.createResource("Lexicon"), RDF.type, LEMON.Lexicon);	
+		
+		
+		
 	}
 
 	private void serialize(LexicalEntry entry, Model model) {
