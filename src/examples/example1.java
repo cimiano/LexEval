@@ -21,6 +21,8 @@ public class example1 {
 	
 	public static void main(String[] args) throws IOException {
 		
+		// This examples creates a transitive verb
+		
 		Lexicon lexicon = new Lexicon();
 		
 		LexicalEntry entry = lexicon.createNewEntry("marry");

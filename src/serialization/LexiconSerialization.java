@@ -27,8 +27,6 @@ public class LexiconSerialization {
 		
 		model.add(model.createResource("Lexicon"), RDF.type, LEMON.Lexicon);	
 		
-		
-		
 	}
 
 	private void serialize(LexicalEntry entry, Model model) {
